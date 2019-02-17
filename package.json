@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/core": "7.2.2",
     "@svgr/webpack": "4.1.0",
+    "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -47,6 +48,7 @@
     "react-router-dom": "^4.3.1",
     "react-simple-sidenav": "^1.0.1",
     "react-slick": "^0.23.2",
+    "react-transition-group": "^2.5.3",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
@@ -60,7 +62,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "dev-serv": "json-server --watch db.json --port 3004"
   },
   "eslintConfig": {
     "extends": "react-app"

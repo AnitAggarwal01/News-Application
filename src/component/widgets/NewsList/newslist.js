@@ -5,10 +5,11 @@ import axios from 'axios';
 import { URL } from '../../../config'
 import styles from './newslist.module.css';
 import Buttons from '../Buttons/buttons'
-
+import CardInfo from '../Cards/cardinfo'
 class NewsList extends Component{
     
     state={
+        teams:[],
         items:[],
         start:this.props.start,
         end:this.props.start+this.props.amount,
@@ -24,21 +25,10 @@ class NewsList extends Component{
         this.request(this.state.start,this.state.end)
     }
 
-    request = (start,end)=>{
-        axios.get(`${URL}/articles?_start=${start}&_end=${end}`)
-        .then((response)=>{
-            this.setState({
-                items:[...this.state.items, ...response.data],
-                start:this.state.start+this.state.amount,
-                end:this.state.end+this.state.amount
-            })
-        })
-    }
-    
     loadMoreNews=()=>{
         this.request(this.state.start,this.state.end)
     }
-
+    
     renderNews = (type)=>{
         let template = null ;
         switch(type){
@@ -56,6 +46,9 @@ class NewsList extends Component{
                             <div>
                                 <div className={styles.newslist_item}>
                                     <Link to={`/articles/${item.id}`}>
+                                        <CardInfo
+                                            teams={this.state.teams} team={item.team} date={item.date}
+                                        />
                                         <h2>{item.title}</h2>
                                     </Link>
                                 </div>
@@ -69,15 +62,40 @@ class NewsList extends Component{
         }
         return template ;
     }
+
+    request = (start,end)=>{
+        if(this.state.teams.length<1){
+            axios.get(`${URL}/teams`)
+            .then( (response)=>{
+                this.setState({
+                    teams:response.data
+                })
+            })
+        }
+        axios.get(`${URL}/articles?_start=${start}&_end=${end}`)
+        .then((response)=>{
+            this.setState({
+                items:[...this.state.items, ...response.data],
+                start:this.state.start+this.state.amount,
+                end:this.state.end+this.state.amount
+            })
+        })
+    }
+    
     render(){
         return(
             <div>
                 <TransitionGroup>
                         {this.renderNews(this.props.type)}
                 </TransitionGroup>
-               <Buttons { ...this.state.buttons }></Buttons>
+                {
+                    this.props.loadmore ?
+                    <Buttons { ...this.state.buttons }/>
+                    : null 
+                }
             </div>
         )
     }
 }
+
 export default NewsList;

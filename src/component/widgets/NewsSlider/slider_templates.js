@@ -5,12 +5,14 @@ import styles from './slider.module.css';
 const SliderTemplate = (props)=>{
     let template = null ;
     const settings ={
-        dots:true,
-        infinite:true,
-        arrows:false,
-        speed:500,
-        slidesToShow:1,
-        slidesToScroll:1,
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        autoplay: true,
+        autoplaySpeed: 7000,
+        speed: 500,
         ...props.settings
     }
     switch(props.type){

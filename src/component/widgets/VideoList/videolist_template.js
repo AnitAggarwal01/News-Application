@@ -5,7 +5,7 @@ import styles from './videolist.module.css';
 const VideoListTemplate = (props)=>{
     return props.data.map((item,i)=>{
         return (
-            <Link to={`/videos/${item.id}`} key={i}>
+            <Link to={`/videos/${item.id}`}   key={i}>
                 <div className={styles.videoListItem_wrapper}>
                     <div className={styles.left} style={{ backgroundImage:`url(/images/videos/${item.image})`}}>
                         <div></div>

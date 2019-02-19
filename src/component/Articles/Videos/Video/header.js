@@ -3,7 +3,10 @@ import TeamCard from '../../Elements/teamcard';
 const Header = (props)=>{
     
     const renderTeamCard = ()=>{
-        return props.teamData.id ? <TeamCard data={props.teamData}/> : null ;
+        if(props.teamData)
+            return props.teamData.id ? <TeamCard data={props.teamData}/> : null ;
+        else
+            return <div></div>
     } 
     
     return(

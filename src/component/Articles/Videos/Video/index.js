@@ -8,10 +8,11 @@ class VideoArticle extends Component{
         article:[],
         team:[],
         teams:[],
-        related:[]
+        related:[],     
+        article_id:this.props.match.params.id
     }
-
-    componentWillMount(){
+    
+    getData=()=>{
         axios.get(`${URL}/videos?id=${this.props.match.params.id}`)
         .then((response)=>{
             let article = response.data[0]
@@ -21,27 +22,38 @@ class VideoArticle extends Component{
                     article,
                     team:response.data[0]
                 });
-                this.getRelated();
+                axios.get(`${URL}/teams`)
+                .then((response)=>{
+                    let teams = response.data ;
+                    axios.get(`${URL}/videos?q=${this.state.team.city}&_limit=3`)
+                    .then((response)=>{
+                        this.setState({
+                          teams,
+                          related:[...response.data],
+                          article_id:this.props.match.params.id
+                        })
+                    })
+                })
                 
             })
         })
-        
     }
 
-    getRelated = ()=>{
-        axios.get(`${URL}/teams`)
-        .then((response)=>{
-            let teams = response.data ;
-            axios.get(`${URL}/videos?q=${this.state.team.city}&_limit=3`)
-            .then((response)=>{
-                this.setState({
-                  teams,
-                  related:[...response.data]  
-                })
-            })
+    componentWillMount=()=>{
+        this.getData();
+    }
+    componentDidUpdate=()=>{
+        if(this.props.match.params.id !== this.state.article_id){
+            this.getData();
+        }
+    }
+
+
+    changeState=(id)=>{
+        this.setState({
+            article_id:id
         })
     }
-    
     render(){
         const team = this.state.team ;
         const article = this.state.article
@@ -49,10 +61,11 @@ class VideoArticle extends Component{
         const related = this.state.related;
         return(
             <div>
-                <Header teamData={team}/>
-                <Body data={ {article, teams, related}}/>
+                { <Header teamData={team}/>}
+                {  <Body data={ {article, teams, related}}/> }
             </div>
         )
     }
 }
+
 export default VideoArticle;
